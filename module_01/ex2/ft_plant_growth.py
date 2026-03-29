@@ -16,7 +16,9 @@ class Plant:
         age (int): The plant's age in days.
     """
 
-    def __init__(self, name: str, height: float, age: int, daily_growth: float) -> None:
+    def __init__(
+        self, name: str, height: float, age: int, daily_growth: float
+    ) -> None:
         self._name = name.capitalize()
         self._initial_height = height
         self._current_height = self._initial_height
@@ -27,10 +29,10 @@ class Plant:
         """
         Prints a summary of the plant name, height and age.
         """
-        print(f"{color}", end='')
+        print(f"{color}", end="")
         print(f"{color}{self._name}: ", end="")
         print(f"{round(self._current_height, 2)}cm, {self._age} days old")
-        print(f"\033[0m", end='') # Reset ANSII code
+        print("\033[0m", end="")  # Reset ANSII code
 
     def grow(self, plant_mesure: float) -> None:
         """
@@ -77,19 +79,19 @@ def ft_age_and_growth(plant: Plant, color: str) -> None:
     Growth simulation using `age` and `grow` method
     """
     print("=== Garden Plant Growth ===")
-    print(f"=== Day 1 ===")
+    print("=== Day 1 ===")
     plant.show(color)
     plant.age(2)
-    print(f"=== Day 3 ===")
+    print("=== Day 3 ===")
     plant.show(color)
     plant.age(1)
-    print(f"=== Day 4 ===")
+    print("=== Day 4 ===")
     plant.show(color)
     plant.grow(16)
-    print(f"=== Day 5 ===")
+    print("=== Day 5 ===")
     plant.show(color)
     plant.age(5)
-    print(f"=== Day 10 ===")
+    print("=== Day 10 ===")
     plant.show(color)
 
 
@@ -109,9 +111,9 @@ def main() -> None:
     plant_cactus = Plant("cactus", 15, 120, 0.1)
 
     ft_grow(plant_rose, colors["RED"])
-    print("-------------------------------------------------------------------")
+    print("------------------------------------------------------------------")
     ft_age(plant_sunflower, colors["GREEN"])
-    print("-------------------------------------------------------------------")
+    print("------------------------------------------------------------------")
     ft_age_and_growth(plant_cactus, colors["YELLOW"])
 
 
