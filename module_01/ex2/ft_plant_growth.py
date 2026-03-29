@@ -23,60 +23,74 @@ class Plant:
         self._age = age
         self._average_daily_growth = daily_growth
 
-    def show(self) -> None:
+    def show(self, color: str | None = None) -> None:
         """
         Prints a summary of the plant name, height and age.
         """
-        print(f"{self._name}: {round(self._current_height, 2)}cm, {self._age} days old")
+        print(f"{color}", end='')
+        print(f"{color}{self._name}: ", end="")
+        print(f"{round(self._current_height, 2)}cm, {self._age} days old")
+        print(f"\033[0m", end='') # Reset ANSII code
 
     def grow(self, plant_mesure: float) -> None:
         """
-        Update the `self._current_height`
+        This function updates the mesured height of the plant.
         """
         self._current_height = plant_mesure
         self._age += 1
 
     def age(self, days_added: int) -> None:
         """
-        Add `days_added` to `self._age` attribute.
+        Adds `days_added` to the plant's age.
+        Also udpdate its `self._average_daily_growth` by the days added.
         """
         self._age += days_added
         self._current_height += self._average_daily_growth * days_added
 
 
-def ft_grow(plant: Plant, colors: dict) -> None:
+def ft_grow(plant: Plant, color: str) -> None:
     """
     Growth simulation only using `grow` method.
-    This functions assumes the plants grows by 0.8cm each day.
+    This function assumes the plants grows by 0.8cm each day.
     """
     print("=== Garden Plant Growth ===")
     for day in range(1, 8):
         print(f"=== Day {day} ===")
-        print(f"{colors["RED"]}", end="")
-        plant.show()
+        plant.show(color)
         plant.grow(plant._current_height + 0.8)
-        print(f"{colors["RESET"]}", end="")
 
 
-def ft_age(plant: Plant, colors: dict) -> None:
+def ft_age(plant: Plant, color: str) -> None:
     """
     Growth simulation only using `age` method.
-    This functions assumes that one day is added at a time.
+    This function assumes that one day is added at a time.
     """
     print("=== Garden Plant Growth ===")
     for day in range(1, 8):
         print(f"=== Day {day} ===")
-        print(f"{colors["GREEN"]}", end="")
-        plant.show()
+        plant.show(color)
         plant.age(1)
-        print(f"{colors["RESET"]}", end="")
 
 
-def ft_age_and_growth(plant: Plant, colors: dict) -> None:
+def ft_age_and_growth(plant: Plant, color: str) -> None:
     """
     Growth simulation using `age` and `grow` method
     """
     print("=== Garden Plant Growth ===")
+    print(f"=== Day 1 ===")
+    plant.show(color)
+    plant.age(2)
+    print(f"=== Day 3 ===")
+    plant.show(color)
+    plant.age(1)
+    print(f"=== Day 4 ===")
+    plant.show(color)
+    plant.grow(16)
+    print(f"=== Day 5 ===")
+    plant.show(color)
+    plant.age(5)
+    print(f"=== Day 10 ===")
+    plant.show(color)
 
 
 def main() -> None:
@@ -94,9 +108,11 @@ def main() -> None:
     plant_sunflower = Plant("sunflower", 80, 45, 1.5)
     plant_cactus = Plant("cactus", 15, 120, 0.1)
 
-    ft_grow(plant_rose, colors)
-    ft_age(plant_sunflower, colors)
-    ft_age_and_growth(plant_cactus, colors)
+    ft_grow(plant_rose, colors["RED"])
+    print("-------------------------------------------------------------------")
+    ft_age(plant_sunflower, colors["GREEN"])
+    print("-------------------------------------------------------------------")
+    ft_age_and_growth(plant_cactus, colors["YELLOW"])
 
 
 if __name__ == "__main__":
