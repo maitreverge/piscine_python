@@ -9,11 +9,14 @@ class Plant:
         name (str): The plant's name, capitalized.
         height (int): The plant's height in centimeters.
         age (int): The plant's age in days.
+        average_daily_growth (float): The plant's average daily growth.
+        initial_height (float): The plant's initial height in centimeters.
 
     Args:
         name (str): The plant's name (will be capitalized).
         height (int): The plant's height in centimeters.
         age (int): The plant's age in days.
+        daily_growth (float): The plant's average daily growth in centimeters.
     """
 
     def __init__(
@@ -105,7 +108,7 @@ def main() -> None:
     """
     Main function
     """
-    colors: dict = {
+    colors: dict[str, str] = {
         "RESET": "\033[0m",
         "RED": "\033[31m",
         "GREEN": "\033[32m",
