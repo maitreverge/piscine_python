@@ -33,7 +33,7 @@ class Plant:
         Prints a summary of the plant name, height and age.
         """
         print(f"{color}", end="")
-        print(f"{color}{self._name}: ", end="")
+        print(f"{self._name}: ", end="")
         print(f"{round(self._current_height, 2)}cm, {self._age} days old")
         print("\033[0m", end="")  # Reset ANSII code
 
