@@ -13,6 +13,6 @@ def main():
 
     for _, dirs, _ in os.walk('.'):
         for dir_name in dirs:
-            shutil.copy2(MAIN_FILE, dir_name)
+            shutil.copy2(MAIN_FILE, os.path.join(dir_name, "main.py"))
 
 main()
