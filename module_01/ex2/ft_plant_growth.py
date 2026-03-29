@@ -60,6 +60,8 @@ def ft_grow(plant: Plant, color: str) -> None:
         print(f"=== Day {day} ===")
         plant.show(color)
         plant.grow(plant._current_height + 0.8)
+    total_growth = round(plant._current_height - plant._initial_height)
+    print(f"Growth this week: {total_growth}cm")
 
 
 def ft_age(plant: Plant, color: str) -> None:
@@ -72,6 +74,8 @@ def ft_age(plant: Plant, color: str) -> None:
         print(f"=== Day {day} ===")
         plant.show(color)
         plant.age(1)
+    total_growth = round(plant._current_height - plant._initial_height)
+    print(f"Growth this week: {total_growth}cm")
 
 
 def ft_age_and_growth(plant: Plant, color: str) -> None:
@@ -93,6 +97,8 @@ def ft_age_and_growth(plant: Plant, color: str) -> None:
     plant.age(5)
     print("=== Day 10 ===")
     plant.show(color)
+    total_growth = round(plant._current_height - plant._initial_height)
+    print(f"Growth those 10 days: {total_growth}cm")
 
 
 def main() -> None:
