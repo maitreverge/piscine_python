@@ -25,6 +25,7 @@ class Plant:
         self.set_height(height)
         self.set_age(age)
         self._average_daily_growth = daily_growth
+        print(f"Plant created: {self.show()}")
 
     def get_height(self) -> float:
         """
@@ -42,10 +43,21 @@ class Plant:
         Args:
             height (float): The plant's height in centimeters.
         """
+        print(f"\n{self._name} height update: ", end='')
         if height < 0:
-            print(f"Invalid given height of {height}.\nSetting height at 0")
-            self._height = 0
+            print(f"rejected.")
+            print(f"Invalid given height of {height}")
+            
+            # Check if set_height has been called for the first time.
+            try:
+                if self._height:
+                    print("Setting height at 0\n")
+            except:
+                print(f"Initiating {self._name} at 0\n")
+                self._height = 0
             return
+                
+        print(f"{height}cm")
         self._height = height
     
     def get_age(self) -> int:
@@ -63,10 +75,21 @@ class Plant:
         Args:
             age (int): The plant's age in days.
         """
+        print(f"\n{self._name} age update: ", end='')
         if age < 0:
-            print(f"Invalid given age of {age}.\nSetting age at 0")
-            self._age = 0
+            print(f"rejected.")
+            print(f"Invalid given age of {age}")
+            
+            # Check if set_age has been called for the first time.
+            try:
+                if self._age:
+                    print("Setting age at 0\n")
+            except:
+                print(f"Initiating {self._name} at 0\n")
+                self._age = 0
             return
+                
+        print(f"{age} days old.")
         self._age = age
 
     def show(self) -> str:
@@ -96,11 +119,15 @@ def main() -> None:
     Main function
     """
 
-    plant_rose = Plant("rose", -25, 30, 0.8)
-    # plant_sunflower = Plant("sunflower", 80, 45, 1.5)
-    # plant_cactus = Plant("cactus", 15, 120, 0.1)
+    print("=== Garden Security System ===")
+    plant_rose = Plant("rose", 25, 30, 0.8)
 
-    print(plant_rose._name)
+    plant_rose.set_age(2)
+    plant_rose.set_age(20)
+    plant_rose.set_age(-20)
+    print(f"{plant_rose._name} age : {plant_rose.get_age()}")
+    
+    # print(f"Plant created: {plant_rose.show()}")
 
 
 if __name__ == "__main__":
