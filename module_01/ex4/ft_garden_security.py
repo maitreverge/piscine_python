@@ -21,8 +21,15 @@ class Plant:
     def __init__(
         self, name: str, height: float, age: int, daily_growth: float
     ) -> None:
+        if height < 0 or age < 0 :
+            raise ValueError(f"Negative height or age provided.")
+        
         self._name = name.capitalize()
-        self.set_height(height)
+        self._height = height
+        self._initial_height = self._height
+
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        
         self.set_age(age)
         self._average_daily_growth = daily_growth
         print(f"Plant created: {self.show()}")
@@ -53,7 +60,7 @@ class Plant:
                 if self._height:
                     print("Setting height at 0\n")
             except:
-                print(f"Initiating {self._name} at 0\n")
+                print(f"Initiating {self._name} at 0")
                 self._height = 0
             return
                 
@@ -75,7 +82,7 @@ class Plant:
         Args:
             age (int): The plant's age in days.
         """
-        print(f"\n{self._name} age update: ", end='')
+        print(f"{self._name} age update: ", end='')
         if age < 0:
             print(f"rejected.")
             print(f"Invalid given age of {age}")
@@ -83,9 +90,9 @@ class Plant:
             # Check if set_age has been called for the first time.
             try:
                 if self._age:
-                    print("Setting age at 0\n")
+                    print("Setting age at 0")
             except:
-                print(f"Initiating {self._name} at 0\n")
+                print(f"Initiating {self._name} at 0")
                 self._age = 0
             return
                 
