@@ -21,83 +21,68 @@ class Plant:
     def __init__(
         self, name: str, height: float, age: int, daily_growth: float
     ) -> None:
-        if height < 0 or age < 0 :
-            raise ValueError(f"Negative height or age provided.")
-        
+        if height < 0 or age < 0 or daily_growth < 0:
+            raise ValueError("Negative height / age / daily_growth provided.")
+
         self._name = name.capitalize()
         self._height = height
         self._initial_height = self._height
-
-        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-        self.set_age(age)
+        self._age = age
         self._average_daily_growth = daily_growth
+
         print(f"Plant created: {self.show()}")
 
     def get_height(self) -> float:
         """
         Returns the plant's height.
-
-        Returns:
-            float: The plant's height in centimeters.
         """
         return self._height
 
-    # @set_height.setter
     def set_height(self, height: float) -> None:
         """
         Sets the plant's height.
-        Args:
-            height (float): The plant's height in centimeters.
         """
-        print(f"\n{self._name} height update: ", end='')
         if height < 0:
-            print(f"rejected.")
-            print(f"Invalid given height of {height}")
-            
+            print(f"Invalid given height of {height} for {self._name}")
+
             # Check if set_height has been called for the first time.
             try:
                 if self._height:
-                    print("Setting height at 0\n")
-            except:
+                    pass  # Keep self._height untouched
+            except Exception as e:
+                print(f"Error {e}")
                 print(f"Initiating {self._name} at 0")
                 self._height = 0
             return
-                
-        print(f"{height}cm")
+
         self._height = height
-    
+        print(f"{self._name} heigh updated : {height}cm")
+
     def get_age(self) -> int:
         """
         Returns the plant's age.
-
-        Returns:
-            int: The plant's age in days.
         """
         return self._age
-    
-    def set_age(self, age: int):
+
+    def set_age(self, age: int) -> None:
         """
         Sets the plant's age.
-        Args:
-            age (int): The plant's age in days.
         """
-        print(f"{self._name} age update: ", end='')
         if age < 0:
-            print(f"rejected.")
-            print(f"Invalid given age of {age}")
-            
+            print(f"Invalid given height of {age} for {self._name}")
+
             # Check if set_age has been called for the first time.
             try:
                 if self._age:
-                    print("Setting age at 0")
-            except:
+                    pass  # Keep self._age untouched
+            except Exception as e:
+                print(f"Exception : {e}")
                 print(f"Initiating {self._name} at 0")
                 self._age = 0
             return
-                
-        print(f"{age} days old.")
+
         self._age = age
+        print(f"{self._name} age updated : {age} days old.")
 
     def show(self) -> str:
         """
@@ -133,8 +118,22 @@ def main() -> None:
     plant_rose.set_age(20)
     plant_rose.set_age(-20)
     print(f"{plant_rose._name} age : {plant_rose.get_age()}")
-    
-    # print(f"Plant created: {plant_rose.show()}")
+
+    plant_rose.set_height(100)
+    print(f"{plant_rose._name} height after update: {plant_rose.get_height()}")
+
+    plant_rose.set_height(-14)
+    print(f"{plant_rose._name} after falsy update: {plant_rose.get_height()}")
+
+    # Trying faly init values leveraging try/except.
+    try:
+        age: int = -10  # False value
+        height: float = 90  # False value
+        daily_growth: float = 10
+        plant_cactus = Plant("cactus", height, age, daily_growth)
+        print(f"{plant_cactus.show()}")
+    except ValueError as e:
+        print(f"Error : {e}")
 
 
 if __name__ == "__main__":
