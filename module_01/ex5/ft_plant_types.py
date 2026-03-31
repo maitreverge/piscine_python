@@ -88,11 +88,12 @@ class Plant:
         """
         return f"{self._name}: {self._height:.1f}cm, {self._age} days old"
 
-    def grow(self, plant_mesure: float) -> None:
+    def grow(self, added_height: float) -> None:
         """
         This function updates the mesured height of the plant.
         """
-        self._height = plant_mesure
+        print(f"[Plant {self._name.lower()} growed of {added_height}cm(s)]")
+        self._height += added_height
         self._age += 1
 
     def age(self, days_added: int) -> None:
@@ -100,6 +101,7 @@ class Plant:
         Adds `days_added` to the plant's age.
         Also udpdate its `self._average_daily_growth` by the days added.
         """
+        print(f"[Plant {self._name.lower()} aged of {days_added} day(s) old]")
         self._age += days_added
         self._height += self._average_daily_growth * days_added
 
@@ -118,6 +120,9 @@ class Flower(Plant):
         self._is_blooming = False
 
     def bloom(self) -> None:
+        """
+        Makes the flower bloom.
+        """
         if self._is_blooming:
             print(f"[{self._name} is already blooming]")
             return
@@ -125,6 +130,12 @@ class Flower(Plant):
         self._is_blooming = True
 
     def show(self) -> str:
+        """
+        Returns a summary of the name, height, age, and blooming status.
+
+        Returns:
+            str: A string containing the flower's information.
+        """
         blooming_info: str = f"\n{self._name} "
         blooming_info += (
             "is blooming beautifully!"
@@ -148,11 +159,20 @@ class Tree(Plant):
         self._trunk_diameter = trunk_diameter
 
     def produce_shade(self) -> None:
+        """
+        Makes the tree produce shade.
+        """
         print(f"[asking the {self._name.lower()} to produce shade]")
-        print(f"Tree {self._name} now produces a shade of ")
+        print(f"Tree {self._name} now produces a shade of ", end="")
         print(f"{self._height}cm long and {self._trunk_diameter}cm wide")
 
     def show(self) -> str:
+        """
+        Returns a summary of the tree's name, height, age, and trunk diameter.
+
+        Returns:
+            str: A string containing the tree's information.
+        """
         extra_attributes: str = f"\nTrunck diameter = {self._trunk_diameter}cm"
         return super().show() + extra_attributes
 
@@ -171,17 +191,37 @@ class Vegetable(Plant):
         self._nutritional_value = 0  # Ask in the subject
 
     def show(self) -> str:
+        """
+        Returns a summary of the vegetable's name, height, age,
+        harvest season, and nutritional value.
+
+        Returns:
+            str: A string containing the vegetable's information.
+        """
         harvest_info: str = f"\nHarvest season: {self._harvest_season}"
         nutrition_info: str = f"\nNutritional value: {self._nutritional_value}"
         extra_attributes: str = harvest_info + nutrition_info
         return super().show() + extra_attributes
 
     def age(self, days_added: int) -> None:
+        """
+        Ages the vegetable by the specified number of days.
+
+        Args:
+            days_added (int): The number of days to add to the vegetable's age.
+        """
         super().age(days_added)
         self._nutritional_value += 1
 
-    def grow(self, plant_mesure: float) -> None:
-        super().grow(plant_mesure)
+    def grow(self, added_height: float) -> None:
+        """
+        Makes the vegetable grow by the specified height.
+
+        Args:
+            added_height (float): The height to add to the
+            vegetable's current height.
+        """
+        super().grow(added_height)
         self._nutritional_value += 1
 
 
@@ -189,14 +229,26 @@ def main() -> None:
     """
     Main function
     """
-    plant_tree = Tree("oak", 180, 2, 0.5, 12)
-
-    print(plant_tree.show())
-    print("-----------")
+    print("=== Garden Plant Types ===")
+    print("=== Flower")
     plant_flower = Flower("rose", 12, 12, 0.5, "red")
     print(plant_flower.show())
     plant_flower.bloom()
     print(plant_flower.show())
+    plant_flower.bloom()  # Rose has already blommed here
+
+    print("\n=== Tree")
+    plant_tree = Tree("oak", 180, 2, 0.5, 12)
+    print(plant_tree.show())
+    plant_tree.produce_shade()
+
+    print("\n=== Vegetable")
+    plant_vegetable = Vegetable("tomato", 12, 6, 0.5, "April")
+    print(plant_vegetable.show())
+    plant_vegetable.grow(0.5)
+    print(plant_vegetable.show())
+    plant_vegetable.age(2)
+    print(plant_vegetable.show())
 
 
 if __name__ == "__main__":
