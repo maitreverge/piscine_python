@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 
-
 class Plant:
     """
     Represents a plant with a name, height, and age.
@@ -188,7 +187,7 @@ class Vegetable(Plant):
     ) -> None:
         super().__init__(name, height, age, daily_growth)
         self._harvest_season = harvest_season
-        self._nutritional_value = 0  # required by the subject
+        self._nutritional_value = 0  # Ask in the subject
 
     def show(self) -> str:
         """
@@ -229,27 +228,7 @@ def main() -> None:
     """
     Main function
     """
-    print("=== Garden Plant Types ===")
-    print("=== Flower")
-    plant_flower = Flower("rose", 12, 12, 0.5, "red")
-    print(plant_flower.show())
-    plant_flower.bloom()
-    print(plant_flower.show())
-    plant_flower.bloom()  # Rose has already blommed here
-
-    print("\n=== Tree")
-    plant_tree = Tree("oak", 180, 2, 0.5, 12)
-    print(plant_tree.show())
-    plant_tree.produce_shade()
-
-    print("\n=== Vegetable")
-    plant_vegetable = Vegetable("tomato", 12, 6, 0.5, "April")
-    print(plant_vegetable.show())
-    plant_vegetable.grow(0.5)
-    print(plant_vegetable.show())
-    plant_vegetable.age(2)
-    print(plant_vegetable.show())
-
+    
 
 if __name__ == "__main__":
     main()
