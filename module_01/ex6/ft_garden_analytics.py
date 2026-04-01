@@ -1,5 +1,6 @@
 #! /usr/bin/python3
 
+
 class Plant:
     """
     Represents a plant with a name, height, and age.
@@ -28,6 +29,16 @@ class Plant:
         self._initial_height = self._height
         self._age = age
         self._average_daily_growth = daily_growth
+
+    # ! A static method can't access the class methods neither attributes
+    @staticmethod
+    def is_older_one_year(age_input: int) -> bool:
+        return age_input > 365
+
+    # ! A class method
+    @classmethod
+    def create_anonymous_plant(cls, *args, **kwargs):
+        return cls("Unkown", 0, 0, 0, *args, **kwargs)
 
     def get_height(self) -> float:
         """
@@ -145,6 +156,33 @@ class Flower(Plant):
         return super().show() + extra_attributes
 
 
+class Seed(Flower):
+    def __init__(
+        self,
+        name: str,
+        height: float,
+        age: int,
+        daily_growth: float,
+        color: str,
+    ) -> None:
+        super().__init__(
+            name,
+            height,
+            age,
+            daily_growth,
+            color,
+        )
+        self._seeds = 0
+    
+    def bloom(self) -> None:
+        super().bloom()
+        self._seeds = 42  # Hardcoded value, might change later.
+
+    def show(self) -> str:
+        extra_attributes: str = f"\nSeeds: {self._seeds}"
+        return super().show() + extra_attributes
+
+
 class Tree(Plant):
     def __init__(
         self,
@@ -228,7 +266,24 @@ def main() -> None:
     """
     Main function
     """
-    
+    print("=== Garden Plant Types ===")
+    print("=== Flower")
+    plant_flower = Flower("rose", 12, 12, 0.5, "red")
+
+    # Checking @staticmethod
+    age_to_check: int = 300
+    if plant_flower.is_older_one_year(age_to_check):
+        print(f"{age_to_check} is over 1 year old")
+    else:
+        print(f"{age_to_check} is NOT over 1 year old")
+
+    # Checking @classmethod
+    try:
+        plant_tree = Tree.create_anonymous_plant()
+        print(plant_tree.show())
+    except Exception as e:
+        print(f"Failed because {e}")
+
 
 if __name__ == "__main__":
     main()
