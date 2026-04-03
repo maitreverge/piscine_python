@@ -18,6 +18,20 @@ class Plant:
         daily_growth (float): The plant's average daily growth in centimeters.
     """
 
+    class Stats:
+        def __init__(self, outter_self: "Plant") -> None:
+            self._outter = outter_self
+            self._grow_calls: int = 0
+            self._age_calls: int = 0
+            self._show_calls: int = 0
+
+        def __str__(self) -> str:
+            announce: str = f"[statistics for {self._outter._name}]\n"
+            return (
+                announce
+                + f"Stats: {self._grow_calls} grow, {self._age_calls} age, {self._show_calls} show"
+            )
+
     def __init__(
         self, name: str, height: float, age: int, daily_growth: float
     ) -> None:
@@ -29,6 +43,7 @@ class Plant:
         self._initial_height = self._height
         self._age = age
         self._average_daily_growth = daily_growth
+        self._stats = self.Stats(self)
 
     # ! A static method can't access the class methods neither attributes
     @staticmethod
@@ -37,7 +52,9 @@ class Plant:
 
     # ! A class method
     @classmethod
-    def create_anonymous_plant(cls, *args, **kwargs):
+    def create_anonymous_plant(
+        cls, *args: object, **kwargs: object
+    ) -> "Plant":
         return cls("Unkown", 0, 0, 0, *args, **kwargs)
 
     def get_height(self) -> float:
@@ -96,12 +113,14 @@ class Plant:
         """
         Returns a summary of the plant name, height and age.
         """
+        self._stats._show_calls += 1
         return f"{self._name}: {self._height:.1f}cm, {self._age} days old"
 
     def grow(self, added_height: float) -> None:
         """
         This function updates the mesured height of the plant.
         """
+        self._stats._grow_calls += 1
         print(f"[Plant {self._name.lower()} growed of {added_height}cm(s)]")
         self._height += added_height
         self._age += 1
@@ -111,6 +130,7 @@ class Plant:
         Adds `days_added` to the plant's age.
         Also udpdate its `self._average_daily_growth` by the days added.
         """
+        self._stats._age_calls += 1
         print(f"[Plant {self._name.lower()} aged of {days_added} day(s) old]")
         self._age += days_added
         self._height += self._average_daily_growth * days_added
@@ -172,8 +192,8 @@ class Seed(Flower):
             daily_growth,
             color,
         )
-        self._seeds = 0
-    
+        self._seeds = 0  # Hardcoded default value, might change later.
+
     def bloom(self) -> None:
         super().bloom()
         self._seeds = 42  # Hardcoded value, might change later.
@@ -184,6 +204,15 @@ class Seed(Flower):
 
 
 class Tree(Plant):
+
+    class Stats(Plant.Stats):
+        def __init__(self, outter_self: "Tree") -> None:
+            super().__init__(outter_self)
+            self._shades_calls: int = 0
+
+        def __str__(self) -> str:
+            return super().__str__() + f"\n{self._shades_calls} shades"
+
     def __init__(
         self,
         name: str,
@@ -193,7 +222,8 @@ class Tree(Plant):
         trunk_diameter: float,
     ) -> None:
         super().__init__(name, height, age, daily_growth)
-        self._trunk_diameter = trunk_diameter
+        self._trunk_diameter: float = trunk_diameter
+        self._stats: Tree.Stats = self.Stats(self)
 
     def produce_shade(self) -> None:
         """
@@ -202,6 +232,7 @@ class Tree(Plant):
         print(f"[asking the {self._name.lower()} to produce shade]")
         print(f"Tree {self._name} now produces a shade of ", end="")
         print(f"{self._height}cm long and {self._trunk_diameter}cm wide")
+        self._stats._shades_calls += 1
 
     def show(self) -> str:
         """
@@ -262,6 +293,16 @@ class Vegetable(Plant):
         self._nutritional_value += 1
 
 
+def show_plant_stat(plant: Plant) -> None:
+    """
+    Show plant internal stats.
+
+    Args:
+        plant (Plant): Plant object
+    """
+    print(plant._stats)
+
+
 def main() -> None:
     """
     Main function
@@ -283,6 +324,12 @@ def main() -> None:
         print(plant_tree.show())
     except Exception as e:
         print(f"Failed because {e}")
+
+    print(plant_flower._stats)
+    plant_flower.grow(0.5)
+    plant_flower.age(1)
+    plant_flower.show()
+    print(plant_flower._stats)
 
 
 if __name__ == "__main__":
