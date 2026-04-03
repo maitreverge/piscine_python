@@ -16,7 +16,7 @@ def main() -> None:
 
     lenght_args: int = len(sys.argv)
 
-    if lenght_args == 2:
+    if lenght_args == 1:
         print("No argument provided !")
     else:
         print(f"Arguments recieved : {lenght_args - 1}")
