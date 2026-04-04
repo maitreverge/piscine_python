@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 import random
-import pprint
 
 """
 Set reminder : Immutable, but can add/remove values
@@ -36,59 +35,61 @@ def gen_player_achievements() -> set[str]:
 
 
 def display_stats(persons: dict[str, set[str]]) -> None:
-    # for person, achievement in persons.items():
-    #     print(f"Player {person.capitalize()}: {achievement}")
+    if len(persons) == 0:
+        raise ValueError("Empty Dict detected.")
 
     # * Note : `*` operator stands for unpacking
     # `set.union` implies at least one arguments, crashes if dict empty
     # `set().union` creates a emptyset first, so does not crash if dict is empty
     distinct_achievements = set().union(*persons.values())
 
+    all_people_achievements: list[set[str]] = list(persons.values())
+
     print(f"There is {len(distinct_achievements)} distincts achievements")
+    print("======")
     print(distinct_achievements)
     print("======")
-
-    all_people_achievements: list[set] = list(persons.values())
-
     for person, achievement in persons.items():
-        # print(f"Only {person.capitalize()} has :", end='')
-        print(f"\nCurrent {person.capitalize()} has {len(achievement)} achievement(s) = {achievement}")
-        # print(f"All people achivemment : {all_people_achievements}")
+        print(
+            f"\nCurrent {person.capitalize()} has {len(achievement)} achievement(s) = {achievement}"
+        )
 
         # ! STEP 1 : Track Uniqueness
-        # Removed current person's achievement to all people achievement
+        # Removed current person's achievement set to all people achievements sets
         cleanned_achievements = [
             x for x in all_people_achievements if achievement != x
         ]
 
         diff = set(achievement).difference(*cleanned_achievements)
         if diff == set():
-            # print(f"Player {person.capitalize()} has no unique achievement")
             print(
                 f"\033[31mPlayer {person.capitalize()} has no unique achievement\033[0m"
             )
         else:
-            # print(f"")
             print(
                 f"\033[32mPlayer {person.capitalize()} has unique achievements = {diff}\033[0m"
             )
+
         # ! STEP 2 : Track Missing achievements
-        missing_achievements = set(distinct_achievements).difference(achievement)
+        missing_achievements = set(distinct_achievements).difference(
+            achievement
+        )
 
         if missing_achievements == set():
             print(f"\033[32m{person.capitalize()} has all achievements\033[0m")
         else:
-            print(f"\033[31m{person.capitalize()} miss {len(missing_achievements)} achievements : {missing_achievements} \033[0m")
+            print(
+                f"\033[31m{person.capitalize()} miss {len(missing_achievements)} achievements : {missing_achievements} \033[0m"
+            )
 
-    # print(f"All people achievements = {all_people_achievements}")
     # ! Find achievements shared by the players
     intersection = set.intersection(*all_people_achievements)
-
     # ! Important : `set().intersection` will always compare null with something else,
-    # ! which will ultimately return null.
-    # intersection_parenthesis = set().intersection(*all_people_achievements)
+    # ! which will ultimately return an empty set
+    # * Example : intersection_falsy = set().intersection(*all_people_achievements)
+
     if intersection == set():
-        print(f"\n\033[31mThere is no common achievements\033[0m")
+        print("\n\033[31mThere is no common achievements\033[0m")
     else:
         print(f"\n\033[32mCommon achievements = {intersection}\033[0m")
 
@@ -99,14 +100,18 @@ def main() -> None:
     """
     print("=== Achievement Tracker System ===")
 
-    persons: dict[str, set] = {
+    persons: dict[str, set[str]] = {
         "alice": gen_player_achievements(),
         "bob": gen_player_achievements(),
         "chalie": gen_player_achievements(),
         "dylan": gen_player_achievements(),
+        "elon": gen_player_achievements(),
     }
 
-    display_stats(persons)
+    try:
+        display_stats(persons)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":
