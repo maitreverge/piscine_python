@@ -16,6 +16,16 @@ def fn_gen() -> Generator[YieldType, SendType, ReturnType]:
 def gen_event(
     names: list[str], actions: list[str]
 ) -> Generator[tuple[str, str], None, None]:
+    """
+    Generate random events with player names and actions.
+
+    Args:
+        names (list[str]): _list of player names_
+        actions (list[str]): _list of possible actions_
+
+    Yields:
+        Generator[tuple[str, str], None, None]: _generator yielding tuples of (player name, action)_
+    """
     while True:
         yield (random.choice(names), random.choice(actions))
 
@@ -23,13 +33,24 @@ def gen_event(
 def consume_event(
     list_to_consume: list[tuple[str, str]],
 ) -> Generator[list[tuple[str, str]], None, None]:
-    
-    while True:
-        to_remove = random.choice(list_to_consume)
-        print(f"Got event from list : {to_remove}")
-        list_to_consume.remove(to_remove)
-        yield list_to_consume
+    """
+    Consume a list of events by randomly removing one event at a time and yielding the remaining list.
 
+    Args:
+        list_to_consume (list[tuple[str, str]]): _list of events to consume, where each event is a tuple of (player name, action)_
+
+    Yields:
+        Generator[list[tuple[str, str]], None, None]: _generator yielding the remaining list of events after each removal_
+    """
+    local_list = list(list_to_consume)
+
+    while local_list:
+        to_remove = random.choice(local_list)
+        print(f"Got event from list : {to_remove}")
+        local_list.remove(to_remove)
+        # ! Note : Yielding a snapshot prevent accessing the local_list
+        # ! outside of this generator function.
+        yield list(local_list)
 
 
 def main() -> None:
@@ -62,20 +83,19 @@ def main() -> None:
     )
 
     # Print 1000 times the generator
-    # for i in range(1000):
-    #     player, action = next(gen)
-    #     print(f"Event {i}: Player {player} did action {action}")
+    for i in range(1000):
+        player, action = next(gen)
+        print(f"Event {i}: Player {player} did action {action}")
     print("===========")
 
     # Store 10 times the generator
-    list_tuples = [next(gen) for x in range(10)]
+    list_tuples = [next(gen) for _ in range(10)]
     print(f"Generated list of 10 events {list_tuples}")
 
-    cms = consume_event(list_tuples)
-    for x in range(len(list_tuples)):
-        next(cms)
-        print(f"Remaining of list : {list_tuples}")
-
+    # Consume them
+    consume_gen = consume_event(list_tuples)
+    for remaining in consume_gen:
+        print(f"Remaining of list : {remaining}")
 
 
 if __name__ == "__main__":
