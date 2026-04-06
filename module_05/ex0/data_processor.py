@@ -17,7 +17,7 @@ class DataProcessor(ABC):
     def __init__(self) -> None:
         super().__init__()
         self._processed_data: list[tuple[int, str]] = []
-        self._processing_rank : int = 0
+        self._processing_rank: int = 0
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -50,14 +50,19 @@ class NumericProcessor(DataProcessor):
     def ingest(
         self, data: int | float | list[int] | list[float] | list[int | float]
     ) -> None:
-        if isinstance(data, (int, float)):
-            to_append = (self._processing_rank, str(data))
-            self._processed_data.append(to_append)
-            self._processing_rank += 1
-        else:  # Only lists
-            for item in data:
-                self._processed_data.append((self._processing_rank, str(item)))
+        if self.validate(data):
+            if isinstance(data, (int, float)):
+                to_append = (self._processing_rank, str(data))
+                self._processed_data.append(to_append)
                 self._processing_rank += 1
+            else:  # Only lists
+                for item in data:
+                    self._processed_data.append(
+                        (self._processing_rank, str(item))
+                    )
+                    self._processing_rank += 1
+        else:
+            raise TypeError("Incorrect Provided Data.")
 
 
 class TextProcessor(DataProcessor):
@@ -76,15 +81,18 @@ class TextProcessor(DataProcessor):
         return False
 
     def ingest(self, data: str | list[str]) -> None:
-        if isinstance(data, str):
-            # self._processed_data.append(data)
-            to_append = (self._processing_rank, data)
-            self._processed_data.append(to_append)
-            self._processing_rank += 1
-        else:
-            for item in data:
-                self._processed_data.append((self._processing_rank, item))
+        if self.validate(data):
+            if isinstance(data, str):
+                # self._processed_data.append(data)
+                to_append = (self._processing_rank, data)
+                self._processed_data.append(to_append)
                 self._processing_rank += 1
+            else:
+                for item in data:
+                    self._processed_data.append((self._processing_rank, item))
+                    self._processing_rank += 1
+        else:
+            raise TypeError("Incorrect Provided Data.")
 
 
 class LogProcessor(DataProcessor):
@@ -101,8 +109,25 @@ class LogProcessor(DataProcessor):
             "DEBUG",
         ]
 
-
-    def validate(self, data: Any) -> bool: ...
+    def validate(self, data: Any) -> bool:
+        if isinstance(data, list):
+            for internal_dict in data:
+                # Check if every node is a dict of size 2
+                if (
+                    not isinstance(internal_dict, dict)
+                    or len(internal_dict) != 2
+                ):
+                    return False
+                else:
+                    # Now check the internal dict
+                    for key, value in internal_dict.items():
+                        # Check that each node are both strings
+                        if not isinstance(key, str) or not isinstance(value, str):
+                            return False
+                        if list(internal_dict) != ['log_level', 'log_message']:
+                            return False
+                        if 
+                        
 
 
 def main() -> None:
