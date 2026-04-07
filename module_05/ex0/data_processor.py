@@ -36,6 +36,16 @@ class NumericProcessor(DataProcessor):
         super().__init__()
 
     def validate(self, data: Any) -> bool:
+        """
+        Parse if `data` is of type `int`, `float`, `list[int]`, `list[float]`
+        or `list[int | float]`
+
+        Args:
+            data (Any): _raw data to parse_
+
+        Returns:
+            bool: _returns `True` is matches format, `False` otherwise_
+        """
         if isinstance(data, (int, float)):
             return True
         elif isinstance(data, list):
@@ -50,6 +60,12 @@ class NumericProcessor(DataProcessor):
     def ingest(
         self, data: int | float | list[int] | list[float] | list[int | float]
     ) -> None:
+        """
+        Ingest data to `self._processed_data`
+
+        Args:
+            data (list | dict): _data to ingest_
+        """
         if self.validate(data):
             if isinstance(data, (int, float)):
                 to_append = (self._processing_rank, str(data))
@@ -70,6 +86,15 @@ class TextProcessor(DataProcessor):
         super().__init__()
 
     def validate(self, data: Any) -> bool:
+        """
+        Parse if `data` is of type either `str` or `list[str]`
+
+        Args:
+            data (Any): _raw data to parse_
+
+        Returns:
+            bool: _returns `True` is matches format, `False` otherwise_
+        """
         if isinstance(data, str):
             return True
         elif isinstance(data, list):
@@ -81,6 +106,12 @@ class TextProcessor(DataProcessor):
         return False
 
     def ingest(self, data: str | list[str]) -> None:
+        """
+        Ingest data to `self._processed_data`
+
+        Args:
+            data (list | dict): _data to ingest_
+        """
         if self.validate(data):
             if isinstance(data, str):
                 # self._processed_data.append(data)
@@ -109,6 +140,33 @@ class LogProcessor(DataProcessor):
             "DEBUG",
         ]
 
+    def _validate_dict(self, data: Any) -> bool:
+        """
+        Validate if data is of the following format :
+        ```
+        {'log_level': 'WARNING', 'log_message': 'message'}
+        ```
+
+        With `log_level` value part of `self._log_levels`
+
+        Args:
+            data (Any): _Data to parse_
+
+        Returns:
+            bool: _returns `True` is matches format, `False` otherwise_
+        """
+        for key, value in data.items():
+            # Check that each node are a str:str pair
+            if not isinstance(key, str) or not isinstance(value, str):
+                return False
+        # Check that keys matches this format
+        if list(data) != ["log_level", "log_message"]:
+            return False
+        # Check that first key stripped and UPPER matches the log levels
+        if list(data.values())[0].strip().upper() not in self._log_levels:
+            return False
+        return True
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, list):
             for internal_dict in data:
@@ -118,16 +176,40 @@ class LogProcessor(DataProcessor):
                     or len(internal_dict) != 2
                 ):
                     return False
-                else:
-                    # Now check the internal dict
-                    for key, value in internal_dict.items():
-                        # Check that each node are both strings
-                        if not isinstance(key, str) or not isinstance(value, str):
-                            return False
-                        if list(internal_dict) != ['log_level', 'log_message']:
-                            return False
-                        if 
-                        
+                return self._validate_dict(internal_dict)
+        elif isinstance(data, dict):
+            if len(data) != 2:
+                return False
+            return self._validate_dict(data)
+        return False
+
+    def _ingest_dict(self, data: dict) -> None:
+        """
+        Create a tuple with combined `log_level` and `log_message` and append it to `self._processed_data`
+
+        Args:
+            data (dict): _dict data_
+        """
+        log_level = data["log_level"].strip().upper()
+        log_message = data["log_message"].strip()
+        self._processed_data.append(
+            (self._processing_rank, f"{log_level}: {log_message}")
+        )
+        self._processing_rank += 1
+
+    def ingest(self, data: list | dict) -> None:
+        """
+        Ingest data to `self._processed_data`
+
+        Args:
+            data (list | dict): _data to ingest_
+        """
+        if self.validate(data):
+            if isinstance(data, list):
+                for dict_item in data:
+                    self._ingest_dict(dict_item)
+            else:
+                self._ingest_dict(data)
 
 
 def main() -> None:
