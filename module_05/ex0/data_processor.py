@@ -58,6 +58,7 @@ class DataProcessor(ABC):
         Returns:
             tuple[int, str]: _self._processed_data.pop(0)_
         """
+        assert len(self._processed_data) > 0
         return self._processed_data.pop(0)
 
 
@@ -267,7 +268,20 @@ class LogProcessor(DataProcessor):
             else:
                 self._ingest_dict(data)
 
-def test_numeric(true_data: list, false_data: )
+
+def test_numeric(true_data: list, false_data: list):
+    n = NumericProcessor()
+    for true_item in true_data:
+        n.ingest(true_item)
+
+    try:
+        for _ in range(20):
+            print(n.output())
+    except AssertionError as e:
+        print(f"Value n is now empty")
+
+    print(f"Actual data in numeric == {n.validate(false_data)}")
+
 
 def main() -> None:
     """
@@ -373,6 +387,7 @@ def main() -> None:
         [42, -42],
     ]
 
+    test_numeric(numeric_data, mixed_numeric_data)
 
 
 if __name__ == "__main__":
