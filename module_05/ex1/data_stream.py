@@ -3,8 +3,7 @@
 This modules focuses on the use of abstract base classes (ABCs)
 
 Notes :
-Abstract Class : can't be instancianted, raises a TypeError.
-Serves as a blueprint
+str(c.__class__.__name__) to print a class name
 """
 
 from abc import ABC, abstractmethod
@@ -41,6 +40,15 @@ class DataProcessor(ABC):
             bool: _returns `True` is matches format, `False` otherwise_
         """
 
+    def stats_data_processed(self) -> tuple[int, int]:
+        """
+        Return a tuple of `(Total processed data, Remaining Data)`
+
+        Returns:
+            tuple[int, int]: _Processed Data stats_
+        """
+        return (self._processing_rank + 1, len(self._processed_data))
+
     @abstractmethod
     def ingest(self, data: Any) -> None:
         """
@@ -60,6 +68,61 @@ class DataProcessor(ABC):
         """
         assert len(self._processed_data) > 0
         return self._processed_data.pop(0)
+
+
+class DataStream:
+    """
+    _Class for managing a stream of data processors_
+    """
+
+    def __init__(self) -> None:
+        print("Initiating DataStream")
+        self._processors: list[DataProcessor] = []
+
+    def register_processor(self, proc: DataProcessor) -> None:
+        """
+        _Register a data processor. Reject if already registered_
+
+        Args:
+            proc (DataProcessor): _Data processor to register_
+
+        Raises:
+            ValueError: _Raised if the processor is already registered_
+        """
+        if proc in self._processors:
+            # ! NOTE `str(proc.__class__.__name__` print the class name
+            raise ValueError(
+                f"Class {str(proc.__class__.__name__)} already in DataStream"
+            )
+        self._processors.append(proc)
+
+    def process_stream(self, stream: list[Any]) -> None:
+        """
+        _Process a stream of data_
+
+        Args:
+            stream (list[Any]): _Stream of data to process_
+        """
+        for item in stream:
+            for processor in self._processors:
+                if processor.validate(item):
+                    print(f"{processor.__class__.__name__} processor")
+                    processor.ingest(item)
+                    break
+            else:
+                print(f"Current data :\n---\n{item}\n---\nCan't be processed")
+            break  # Break if the inner loop DID break, switch to the next item
+
+    def print_processors_stats(self) -> None:
+        """
+        Need to know how much data has been processed + how much remaining
+        """
+        print("=== Data Stream Statistics ===")
+        for processor in self._processors:
+            proc_name: str = processor.__class__.__name__
+            total, remaining = processor.stats_data_processed()
+            print(f"{proc_name} : {total} items processed ", end="")
+            print(f"remaining {remaining} on processor")
 
 
 class NumericProcessor(DataProcessor):
