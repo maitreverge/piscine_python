@@ -4,10 +4,12 @@ This modules focuses on the use of abstract base classes (ABCs)
 
 Notes :
 str(c.__class__.__name__) to print a class name
+
+Protocol Class : Allows
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Protocol
 
 
 class DataProcessor(ABC):
@@ -113,6 +115,17 @@ class DataStream:
                 print(f"Current data :\n---\n{item}\n---\nCan't be processed")
             break  # Break if the inner loop DID break, switch to the next item
 
+    def output_pipeline(self, nb: int, plugin:ExportPlugin) -> None:
+        assert isinstance(nb, int) and nb > 0
+        result: list[tuple[int, str]] = []
+        
+        for processor in self._processors:
+            print(f"Output {nb} items from {processor.__class__.__name__}")
+            for i in range(nb):
+                result.append(processor.output())
+            ExportPlugin.process_output(result)
+            result.clear()
+
     def print_processors_stats(self) -> None:
         """
         Need to know how much data has been processed + how much remaining
@@ -123,6 +136,36 @@ class DataStream:
             total, remaining = processor.stats_data_processed()
             print(f"{proc_name} : {total} items processed ", end="")
             print(f"remaining {remaining} on processor")
+    
+
+
+class ExportPlugin(Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        pass
+
+
+class CsvExport:
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        print("CSV Output: ")
+        len_data: int = len(data)
+        for i, item in enumerate(data, 1):
+            print({item[0]})
+            if i != len_data:
+                print(",", end="")
+        print("")
+
+
+class JsonExport:
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        print("JSON Output: ")
+        len_data: int = len(data)
+        print("{")
+        for i, item in enumerate(data, 1):
+            nb, message = item
+            print(f'"item_{nb}": "{message}"', end="")
+            if i != len_data:
+                print(",", end="")
+        print("}")
 
 
 class NumericProcessor(DataProcessor):
@@ -336,6 +379,9 @@ def main() -> None:
     """
     Main function
     """
+    print("=== Code Nexus - Data Pipeline ===")
+    data_stream = DataStream()
+
 
 
 if __name__ == "__main__":
