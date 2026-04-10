@@ -47,7 +47,7 @@ class DataProcessor(ABC):
         Returns:
             tuple[int, int]: _Processed Data stats_
         """
-        return (self._processing_rank + 1, len(self._processed_data))
+        return (self._processing_rank, len(self._processed_data))
 
     @abstractmethod
     def ingest(self, data: Any) -> None:
@@ -66,7 +66,7 @@ class DataProcessor(ABC):
         Returns:
             tuple[int, str]: _self._processed_data.pop(0)_
         """
-        assert len(self._processed_data) > 0
+        assert len(self._processed_data) > 0, "No data left"
         return self._processed_data.pop(0)
 
 
@@ -89,12 +89,17 @@ class DataStream:
         Raises:
             ValueError: _Raised if the processor is already registered_
         """
+        assert isinstance(
+            proc, DataProcessor
+        ), "DataStream.register_processor. `proc` arguent not `DataProcessor`"
         if proc in self._processors:
             # ! NOTE `str(proc.__class__.__name__` print the class name
             raise ValueError(
                 f"Class {str(proc.__class__.__name__)} already in DataStream"
             )
         self._processors.append(proc)
+        print(f"{proc.__class__.__name__} processor successfully registered")
+
 
     def process_stream(self, stream: list[Any]) -> None:
         """
@@ -106,12 +111,11 @@ class DataStream:
         for item in stream:
             for processor in self._processors:
                 if processor.validate(item):
-                    print(f"{processor.__class__.__name__} processor")
                     processor.ingest(item)
                     break
             else:
                 print(f"Current data :\n---\n{item}\n---\nCan't be processed")
-            break  # Break if the inner loop DID break, switch to the next item
+
 
     def print_processors_stats(self) -> None:
         """
@@ -146,12 +150,12 @@ class NumericProcessor(DataProcessor):
         Returns:
             bool: _returns `True` is matches format, `False` otherwise_
         """
-        if isinstance(data, (int, float)):
+        if type(data) in (int, float):
             return True
         if isinstance(data, list):
             # Check the whole list first
             for item in data:
-                if not isinstance(item, (int, float)):
+                if type(item) not in (int, float):
                     return False
             # From here, the data is valid
             return True
@@ -276,9 +280,9 @@ class LogProcessor(DataProcessor):
             if not isinstance(key, str) or not isinstance(value, str):
                 return False
         # Check that keys matches this format
-        if list(data) != ["log_level", "log_message"] or list(data) != [
-            "log_message",
-            "log_level",
+        if list(data) not in [
+            ["log_level", "log_message"],
+            ["log_message", "log_level"],
         ]:
             return False
         # Check that first key stripped and UPPER matches the log levels

@@ -262,13 +262,11 @@ class NumericProcessor(DataProcessor):
         Returns:
             bool: _returns `True` is matches format, `False` otherwise_
         """
-        # if isinstance(data, (int, float)):
         if type(data) in (int, float):
             return True
         if isinstance(data, list):
             # Check the whole list first
             for item in data:
-                # if not isinstance(item, (int, float)):
                 if type(item) not in (int, float):
                     return False
             # From here, the data is valid
