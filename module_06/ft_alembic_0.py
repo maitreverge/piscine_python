@@ -1,7 +1,19 @@
+#! /usr/bin/python3
 """
-Import elements imports the elements.py at the same level
+Simple import from the file `elements.py`
 """
 
 import elements
 
-print(elements.create_fire())
+def main() -> None:
+    """
+    Main function
+    """
+    print("=== Alembic 0 ===")
+    print("Using: 'import ...'structure to access elements.py")
+    print("Testing create_fire: ", end='')
+    print(elements.create_fire())
+    
+
+if __name__ == "__main__":
+    main()
