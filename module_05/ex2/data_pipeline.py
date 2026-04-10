@@ -4,12 +4,21 @@ This modules focuses on the use of abstract base classes (ABCs)
 
 Notes :
 str(c.__class__.__name__) to print a class name
+An bool is a int
+assert(True, int) => Okay
+
+To make a difference, assert type(boolean_value)in (float, int) => assert err
 
 Protocol Class : Allows
 """
 
 from abc import ABC, abstractmethod
 from typing import Any, Protocol
+
+
+class ExportPlugin(Protocol):
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        pass
 
 
 class DataProcessor(ABC):
@@ -78,7 +87,7 @@ class DataStream:
     """
 
     def __init__(self) -> None:
-        print("Initiating DataStream")
+        print("Initiating DataStream...\n")
         self._processors: list[DataProcessor] = []
 
     def register_processor(self, proc: DataProcessor) -> None:
@@ -91,12 +100,17 @@ class DataStream:
         Raises:
             ValueError: _Raised if the processor is already registered_
         """
+        assert isinstance(
+            proc, DataProcessor
+        ), "DataStrem.register_processor. `proc` arguent is not of type `DataProcessor`"
         if proc in self._processors:
             # ! NOTE `str(proc.__class__.__name__` print the class name
-            raise ValueError(
-                f"Class {str(proc.__class__.__name__)} already in DataStream"
+            print(
+                f"WARNING: Class {proc.__class__.__name__} already in DataStream"
             )
+            return
         self._processors.append(proc)
+        print(f"{proc.__class__.__name__} processor successfully registered")
 
     def process_stream(self, stream: list[Any]) -> None:
         """
@@ -105,25 +119,29 @@ class DataStream:
         Args:
             stream (list[Any]): _Stream of data to process_
         """
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         for item in stream:
             for processor in self._processors:
                 if processor.validate(item):
-                    print(f"{processor.__class__.__name__} processor")
+                    print(f"{processor.__class__.__name__} processor can process {item}")
                     processor.ingest(item)
                     break
             else:
                 print(f"Current data :\n---\n{item}\n---\nCan't be processed")
-            break  # Break if the inner loop DID break, switch to the next item
+            # break  # Break if the inner loop DID break, switch to the next item
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    def output_pipeline(self, nb: int, plugin:ExportPlugin) -> None:
-        assert isinstance(nb, int) and nb > 0
+    def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
+        assert (
+            isinstance(nb, int) and nb > 0
+        ), "DataStream.output_pipeline : `nb` is not a positive int"
         result: list[tuple[int, str]] = []
-        
+
         for processor in self._processors:
             print(f"Output {nb} items from {processor.__class__.__name__}")
-            for i in range(nb):
+            for _ in range(nb):
                 result.append(processor.output())
-            ExportPlugin.process_output(result)
+            plugin.process_output(result)
             result.clear()
 
     def print_processors_stats(self) -> None:
@@ -131,17 +149,15 @@ class DataStream:
         Need to know how much data has been processed + how much remaining
         """
         print("=== Data Stream Statistics ===")
+        if len(self._processors) == 0:
+            print("No processor registered, so stats to display\n")
+            return
+
         for processor in self._processors:
             proc_name: str = processor.__class__.__name__
             total, remaining = processor.stats_data_processed()
             print(f"{proc_name} : {total} items processed ", end="")
             print(f"remaining {remaining} on processor")
-    
-
-
-class ExportPlugin(Protocol):
-    def process_output(self, data: list[tuple[int, str]]) -> None:
-        pass
 
 
 class CsvExport:
@@ -189,12 +205,14 @@ class NumericProcessor(DataProcessor):
         Returns:
             bool: _returns `True` is matches format, `False` otherwise_
         """
-        if isinstance(data, (int, float)):
+        # if isinstance(data, (int, float)):
+        if type(data) in (int, float):
             return True
         if isinstance(data, list):
             # Check the whole list first
             for item in data:
-                if not isinstance(item, (int, float)):
+                # if not isinstance(item, (int, float)):
+                if type(item) not in (int, float):
                     return False
             # From here, the data is valid
             return True
@@ -382,6 +400,54 @@ def main() -> None:
     print("=== Code Nexus - Data Pipeline ===")
     data_stream = DataStream()
 
+    data_stream.print_processors_stats()
+
+    data_batch_1 : list[Any] =  [
+        # True,
+        # "Hello world",
+        # [3.14, -1, 2.71],
+        [
+            {
+                "log_level": "WARNING",
+                "log_message": "Telnet access! Use ssh instead",
+            },
+            {"log_level": "INFO", "log_message": "User wil is connected"},
+        ],
+        # 42,
+        # ["Hi", "five"],
+        # Total : text = 3, Numeric 4, Log = 2
+    ]
+
+    data_batch_2 = [
+        21,
+        ["I love AI", "LLMs are wonderful", "Stay healthy"],
+        [
+            {"log_level": " ERROR", "log_message": "500 server crash"},
+            {
+                "log_level": "NOTICE",
+                "log_message": "Certificate expires in 10 days",
+            },
+        ],
+        [32, 42, 64, 84, 128, 168],
+        "World hello",
+    ]
+
+    text_p = TextProcessor()
+    num_p = NumericProcessor()
+    log_p = LogProcessor()
+
+    try:
+        # data_stream.register_processor(text_p)
+        # data_stream.register_processor(text_p)  #! Raises a warning
+        # data_stream.register_processor(num_p)
+        data_stream.register_processor(log_p)
+        # data_stream.register_processor(num_p)  #! Raises a warning
+        data_stream.process_stream(data_batch_1)
+        # print(data_stream._processors[0].output())
+        # print(data_stream._processors[0].output())
+        # data_stream.print_processors_stats()
+    except Exception as e:
+        print(f"Error: {e}")
 
 
 if __name__ == "__main__":
