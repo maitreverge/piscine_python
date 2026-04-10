@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 """
-_module_doc_
+Focus on the 'from ... import ...' structure to access the alchemy module.
 """
 
 from alchemy import elements

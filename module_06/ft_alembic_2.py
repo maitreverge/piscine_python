@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 """
-_module_doc_
+Focus on the 'import ...' structure to access the elements.py file.
 """
 
 import alchemy.elements

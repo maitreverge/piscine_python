@@ -1,6 +1,8 @@
 #! /usr/bin/python3
 """
-_module_doc_
+Focus on the 'import ...' structure to access the alchemy module.
+This will show that only the functions defined in __init__.py are accessible,
+and not the ones in elements.py
 """
 
 import alchemy

@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 """
-_module_doc_
+Focus on the 'from ... import ...' structure to access the elements.py file.
 """
 
 from elements import create_water
