@@ -58,7 +58,7 @@ class DataProcessor(ABC):
         Returns:
             tuple[int, str]: _self._processed_data.pop(0)_
         """
-        assert len(self._processed_data) > 0
+        assert len(self._processed_data) > 0, "No data left"
         return self._processed_data.pop(0)
 
 
@@ -83,12 +83,12 @@ class NumericProcessor(DataProcessor):
         Returns:
             bool: _returns `True` is matches format, `False` otherwise_
         """
-        if isinstance(data, (int, float)):
+        if type(data) in (int, float):
             return True
         if isinstance(data, list):
             # Check the whole list first
             for item in data:
-                if not isinstance(item, (int, float)):
+                if type(item) not in (int, float):
                     return False
             # From here, the data is valid
             return True
@@ -213,9 +213,9 @@ class LogProcessor(DataProcessor):
             if not isinstance(key, str) or not isinstance(value, str):
                 return False
         # Check that keys matches this format
-        if list(data) != ["log_level", "log_message"] or list(data) != [
-            "log_message",
-            "log_level",
+        if list(data) not in [
+            ["log_level", "log_message"],
+            ["log_message", "log_level"],
         ]:
             return False
         # Check that first key stripped and UPPER matches the log levels
