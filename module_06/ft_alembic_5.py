@@ -10,7 +10,8 @@ def main() -> None:
     Main function
     """
     print("=== Alembic 5 ===")
-    print("xxx", end='')
+    print("Accessing the alchemy module using 'from alchemy import ...'")
+    print("Testing create_air: ", end='')
     print(elements.create_air())
     
 
