@@ -177,3 +177,5 @@ pyrightconfig.json
 
 # Customs gitignores
 subjects/
+.helpers/9/data_generator.tar
+.helpers/10/generator.tar.gz
