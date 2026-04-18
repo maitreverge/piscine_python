@@ -21,15 +21,27 @@ class Creature(ABC):
 
     @property
     def attack_name(self) -> str:
+        """
+        _Get the name of the creature's attack._
+        Returns:
+            str: The name of the creature's attack.
+        """
         return self._attack_name
 
     @attack_name.setter
-    def attack_name(self, input_attack_name: str) -> None:
-        if not isinstance(input_attack_name, str):
+    def attack_name(self, name_attack: str) -> None:
+        """
+        _Set the name of the creature's attack._
+        Args:
+            name_attack (str): The name to set for the creature's attack.
+        Raises:
+            TypeError: If the input attack name is not a string.
+        """
+        if not isinstance(name_attack, str):
             raise TypeError(
-                f"input attack name must be `str`, got `{type(input_attack_name)}`"
+                f"input attack name must be `str`, got `{type(name_attack)}`"
             )
-        self._attack_name = input_attack_name
+        self._attack_name = name_attack
 
     @property
     def name(self) -> str:
@@ -99,7 +111,7 @@ class Creature(ABC):
         Returns:
             str: A string describing the creature.
         """
-        return f"Creature `{self._name}` is of type `{self._type}`"
+        return f"Creature `{self.name}` is of type `{self.type}`"
 
 
 class Flameling(Creature):
