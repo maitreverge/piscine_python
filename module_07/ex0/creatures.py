@@ -97,8 +97,8 @@ class Flameling(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self) -> None:
-        super().__init__("Flameling", "Fire")
+    def __init__(self, input_name: str) -> None:
+        super().__init__(input_name, "Fire")
 
     def attack(self) -> str:
         return f"{self.name} uses Ember!"
@@ -111,8 +111,8 @@ class Pyrodon(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self) -> None:
-        super().__init__("Pyrodon", "Fire/Flying")
+    def __init__(self, input_name: str) -> None:
+        super().__init__(input_name, "Fire/Flying")
 
     def attack(self) -> str:
         return f"{self.name} uses Flamethrower!"
@@ -125,8 +125,8 @@ class Aquabub(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self) -> None:
-        super().__init__("Aquabub", "Water")
+    def __init__(self, input_name: str) -> None:
+        super().__init__(input_name, "Water")
 
     def attack(self) -> str:
         return f"{self.name} uses Water Gun!"
@@ -139,8 +139,8 @@ class Torragon(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self) -> None:
-        super().__init__("Torragon", "Water")
+    def __init__(self, input_name: str) -> None:
+        super().__init__(input_name, "Water")
 
     def attack(self) -> str:
         return f"{self.name} uses Hydro Pump!"
