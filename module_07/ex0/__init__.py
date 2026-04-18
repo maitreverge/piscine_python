@@ -1,3 +1,3 @@
-__all__ = []
+__all__ = ["FlameFactory", "AquaFactory"]
 
 from factories import FlameFactory, AquaFactory

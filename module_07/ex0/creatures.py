@@ -17,6 +17,19 @@ class Creature(ABC):
     def __init__(self, input_name: str, input_type: str) -> None:
         self.name = input_name
         self.type = input_type
+        self.attack_name = ""
+
+    @property
+    def attack_name(self) -> str:
+        return self._attack_name
+
+    @attack_name.setter
+    def attack_name(self, input_attack_name: str) -> None:
+        if not isinstance(input_attack_name, str):
+            raise TypeError(
+                f"input attack name must be `str`, got `{type(input_attack_name)}`"
+            )
+        self._attack_name = input_attack_name
 
     @property
     def name(self) -> str:
@@ -97,11 +110,12 @@ class Flameling(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self, input_name: str) -> None:
-        super().__init__(input_name, "Fire")
+    def __init__(self) -> None:
+        super().__init__("Flameling", "Fire")
+        self.attack_name = "Ember"
 
     def attack(self) -> str:
-        return f"{self.name} uses Ember!"
+        return f"{self.name} uses {self.attack_name}!"
 
 
 class Pyrodon(Creature):
@@ -111,11 +125,12 @@ class Pyrodon(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self, input_name: str) -> None:
-        super().__init__(input_name, "Fire/Flying")
+    def __init__(self) -> None:
+        super().__init__("Pyrodon", "Fire/Flying")
+        self.attack_name = "Flamethrower"
 
     def attack(self) -> str:
-        return f"{self.name} uses Flamethrower!"
+        return f"{self.name} uses {self.attack_name}!"
 
 
 class Aquabub(Creature):
@@ -125,11 +140,12 @@ class Aquabub(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self, input_name: str) -> None:
-        super().__init__(input_name, "Water")
+    def __init__(self) -> None:
+        super().__init__("Aquabub", "Water")
+        self.attack_name = "Water Gun"
 
     def attack(self) -> str:
-        return f"{self.name} uses Water Gun!"
+        return f"{self.name} uses {self.attack_name}!"
 
 
 class Torragon(Creature):
@@ -139,8 +155,9 @@ class Torragon(Creature):
         Creature (_type_): Base class for all creatures.
     """
 
-    def __init__(self, input_name: str) -> None:
-        super().__init__(input_name, "Water")
+    def __init__(self) -> None:
+        super().__init__("Torragon", "Water")
+        self.attack_name = "Hydro Pump"
 
     def attack(self) -> str:
-        return f"{self.name} uses Hydro Pump!"
+        return f"{self.name} uses {self.attack_name}!"
