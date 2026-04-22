@@ -1,11 +1,5 @@
-#! /usr/bin/python3
-"""
-_module_doc_
-"""
-
 from abc import ABC, abstractmethod
-from ex0.creatures import Creature
-
+from ex0.creature import Creature
 
 class HealCapability(ABC):
     def __init__(self) -> None:
@@ -23,19 +17,3 @@ class HealCapability(ABC):
         Returns:
             str: _description_
         """
-
-class TransformCapability(ABC):
-    def __init__(self) -> None:
-        super().__init__()
-        self.is_transformed: bool = False
-
-    
-    @abstractmethod
-    def transform(self) -> str:
-        ...
-    
-    @abstractmethod
-    def revert(self) -> str:
-        ...
-    
-    
