@@ -1,8 +1,3 @@
-#! /usr/bin/python3
-"""
-_This module focuses on the Abstract Factory Design Pattern_
-"""
-
 from abc import ABC, abstractmethod
 
 
@@ -112,64 +107,3 @@ class Creature(ABC):
             str: A string describing the creature.
         """
         return f"Creature `{self.name}` is of type `{self.type}`"
-
-
-class Flameling(Creature):
-    """
-    Creates a Flameling Creature.
-
-    Args:
-        Creature (_type_): Base class for all creatures.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("Flameling", "Fire")
-        self.attack_name = "Ember"
-
-    def attack(self) -> str:
-        return f"{self.name} uses {self.attack_name}!"
-
-
-class Pyrodon(Creature):
-    """
-    Creates a Pyrodon Creature.
-    Args:
-        Creature (_type_): Base class for all creatures.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("Pyrodon", "Fire/Flying")
-        self.attack_name = "Flamethrower"
-
-    def attack(self) -> str:
-        return f"{self.name} uses {self.attack_name}!"
-
-
-class Aquabub(Creature):
-    """
-    Creates an Aquabub Creature.
-    Args:
-        Creature (_type_): Base class for all creatures.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("Aquabub", "Water")
-        self.attack_name = "Water Gun"
-
-    def attack(self) -> str:
-        return f"{self.name} uses {self.attack_name}!"
-
-
-class Torragon(Creature):
-    """
-    Creates a Torragon Creature.
-    Args:
-        Creature (_type_): Base class for all creatures.
-    """
-
-    def __init__(self) -> None:
-        super().__init__("Torragon", "Water")
-        self.attack_name = "Hydro Pump"
-
-    def attack(self) -> str:
-        return f"{self.name} uses {self.attack_name}!"

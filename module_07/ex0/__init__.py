@@ -1,3 +1,4 @@
-__all__ = ["FlameFactory", "AquaFactory"]
+from .FlameFactory import FlameFactory
+from .AquaFactory import AquaFactory
 
-from .factories import FlameFactory, AquaFactory
+__all__ = ["FlameFactory", "AquaFactory"]
