@@ -1,7 +1,8 @@
-from ex0.Creature import Creature
-from ex0.CreateFactory import CreatureFactory
-from ex0.Aquabub import Aquabub
-from ex0.Torragon import Torragon
+from ex0.creature import Creature
+from ex0.create_factory import CreatureFactory
+from ex0.aquabub import Aquabub
+from ex0.torragon import Torragon
+
 
 class AquaFactory(CreatureFactory):
     """_Concrete factory for creating aqua creatures._"""

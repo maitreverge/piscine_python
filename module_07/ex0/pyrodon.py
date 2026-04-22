@@ -1,4 +1,4 @@
-from ex0.Creature import Creature
+from ex0.creature import Creature
 
 
 class Pyrodon(Creature):

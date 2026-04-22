@@ -1,7 +1,7 @@
-from ex0.CreateFactory import CreatureFactory
-from ex0.Creature import Creature
-from ex0.Flameling import Flameling
-from ex0.Pyrodon import Pyrodon
+from ex0.create_factory import CreatureFactory
+from ex0.creature import Creature
+from ex0.flameling import Flameling
+from ex0.pyrodon import Pyrodon
 
 
 class FlameFactory(CreatureFactory):

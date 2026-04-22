@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from ex0.Creature import Creature
+from ex0.creature import Creature
+
 
 class CreatureFactory(ABC):
     """
