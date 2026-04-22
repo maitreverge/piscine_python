@@ -1,10 +1,15 @@
 from abc import ABC, abstractmethod
 from ex0.creature import Creature
 
-class HealCapability(ABC):
-    def __init__(self) -> None:
-        super().__init__()
-    
+
+class HealCapability(ABC):  # pylint: disable=too-few-public-methods
+    """
+    _Class representing the ability to heal_
+
+    Args:
+        ABC (_type_): _Abstract Base Class_
+    """
+
     @abstractmethod
     def heal(self, target: Creature | None = None) -> str:
         """

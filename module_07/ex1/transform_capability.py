@@ -1,16 +1,30 @@
 from abc import ABC, abstractmethod
 
-class TransformCapability(ABC):
-    def __init__(self) -> None:
-        super().__init__()
-        self.is_transformed: bool = False
 
-    
+class TransformCapability(ABC):
+    """
+    _Class representing the ability to transform_
+
+    Args:
+        ABC (_type_): _Abstract Base Class_
+    """
+
     @abstractmethod
     def transform(self) -> str:
-        ...
-    
+        """
+        _Turn Creature into a transformed mode,
+        and modify `self.is_transformed` accordingly_
+
+        Returns:
+            str: _Transformation process_
+        """
+
     @abstractmethod
     def revert(self) -> str:
-        ...
-    
+        """
+        _Turn Creature into a normal mode,
+        and modify `self.is_transformed` accordingly_
+
+        Returns:
+            str: _Revert process_
+        """

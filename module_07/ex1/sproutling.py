@@ -1,6 +1,7 @@
 from ex0.creature import Creature
 from ex1.heal_capability import HealCapability
 
+
 class Sproutling(Creature, HealCapability):
     """
     _Creature with an healing capability_
