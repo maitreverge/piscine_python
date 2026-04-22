@@ -11,8 +11,8 @@ def main() -> None:
     Main function
     """
     print("=== Testing Flame Factories ===")
-    
-    ### Flame factories
+
+    # Flame factories
     flame_fact = FlameFactory()
     flame_base = flame_fact.create_base()
     flame_adv = flame_fact.create_evolved()
@@ -21,8 +21,10 @@ def main() -> None:
     print(flame_base.attack())
     print(flame_adv.describe())
     print(flame_adv.attack())
-    
-    ### Aqua factories
+    print(flame_adv.attack())
+    print(flame_adv.attack())
+
+    # Aqua factories
     print("\n=== Testing Aqua Factories ===")
     aqua_fact = AquaFactory()
 
@@ -34,9 +36,8 @@ def main() -> None:
     print(aqua_adv.describe())
     print(aqua_adv.attack())
 
-
     # print(aa.describe())
-    
+
 
 if __name__ == "__main__":
     main()
