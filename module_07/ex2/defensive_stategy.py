@@ -14,7 +14,8 @@ class DefensiveStrategy(BattleStrategy):
         if self.is_valid(creature):
             transform = cast(HealCapability, creature)
             return creature.attack() + transform.heal()
-        raise TypeError("Provided object is not of booth types `Creature` and `HealCapability")
+        raise TypeError(f"Provided creature {creature.name} does not fit defensive strategy")
+    
         
 
     def is_valid(self, creature: Creature) -> bool:

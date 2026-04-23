@@ -8,7 +8,7 @@ class AgressiveStrategy(BattleStrategy):
         if self.is_valid(creature):
             transformable = cast(TransformCapability, creature)
             return transformable.transform() + creature.attack() + transformable.revert()
-        raise TypeError("Provided object is not of both types `Creature` and `TransformCapability`")
+        raise TypeError(f"Provided creature {creature.name} does not fit agressive strategy")
     
     def is_valid(self, creature: Creature) -> bool:
         if isinstance(creature, Creature) and isinstance(creature, TransformCapability):
