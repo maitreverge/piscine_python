@@ -58,10 +58,12 @@ def generate_matrix_analysis() -> None:
     print(f"RNG = {rng}")
     values = rng.normal(loc=50, scale=15, size=data_points)
 
-    data_frame = pd.DataFrame({
-        "index": np.arange(data_points),
-        "value": values,
-    })
+    data_frame = pd.DataFrame(
+        {
+            "index": np.arange(data_points),
+            "value": values,
+        }
+    )
 
     print("Generating visualization...")
     plt.figure(figsize=(10, 5))
