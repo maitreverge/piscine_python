@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "loading"
+version = "0.1.0"
+description = "This is a description for ex1."
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "*"
+matplotlib = "*"
+numpy = "*"
+importlib = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
